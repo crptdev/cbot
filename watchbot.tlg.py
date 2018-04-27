@@ -87,15 +87,15 @@ def f_put_csv(name='out.csv', data=[], entetes=[]):
             writer.writerow( (row[1:len(row)]) )
     file.close()
 
-def f_put_tlg(bot, data=[], entetes=[]):
+def f_put_tlg(bot, chat_id,data=[], entetes=[]):
     msg =''
     for row in entetes:
             msg = msg + '<b>' + row + '</b>' + ','
     for row in data:
             msg = msg + str(row[1:len(row)])
 
-    bot.send_message(chat_id='chat_id', text=msg, parse_mode=telegram.ParseMode.HTML)
-    bot.send_message(chat_id='chat_id', text=msg, parse_mode=telegram.ParseMode.HTML)
+    bot.send_message(chat_id=chat_id, text=msg, parse_mode=telegram.ParseMode.HTML)
+    bot.send_message(chat_id=chat_id, text=msg, parse_mode=telegram.ParseMode.HTML)
 
 def f_init_tlg(Tlgkey):
     bot = telegram.Bot(token=Tlgkey)
@@ -107,8 +107,12 @@ def f_Load_Conf(Fic):
         #logger.info('Lecture du fichier %s', Fic)
         if config.has_option('tlg', 'Tlgkey'):
             Tlgkey = config .get (tlg, 'Tlgkey')
-        else: Tlgkey= ''
-    return Tlgkey
+            chat_id = config .get (tlg, 'chat_id')
+        else:
+            Tlgkey= ''
+            chat_id= ''
+
+    return Tlgkey, chat_id
 
 
 # ##########
@@ -117,7 +121,7 @@ def f_Load_Conf(Fic):
 
 def main():
     global Pause, Augment, Url, Achat, Banque, Qte, Pair, Market
-    Tlgkey = f_Load_Conf(sys.argv[0][:-3]  + '.ini')
+    Tlgkey, chat_id = f_Load_Conf(sys.argv[0][:-3]  + '.ini')
     bot = f_init_tlg(Tlgkey)
     data =[]
     start_time = time.time()
@@ -163,7 +167,7 @@ def main():
                                             # Entetes_Trades = [ 'TimeStamp','Pair','Transaction','Qte','Price',Bank']
                                             #print(Fachats_ventes, [0,int(time.time()), 'Achat', Qte,New_Price,Banque],Entetes_Trades)
                                             f_put_csv(Fachats_ventes,[[0,int(time.time()),Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
-                                            f_put_tlg(bot,[[0,int(time.time()),Market,Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
+                                            f_put_tlg(bot,chat_id,[[0,int(time.time()),Market,Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
 
                             else:
                                     SellPrice = New_Price + 0
@@ -173,7 +177,7 @@ def main():
                                     print("[ ]")
                                     print("[+] Augmentation de " + str(Delta_Price)+"% => Achat de " + str(Qte) + " a "+ str(SellPrice))
                                     f_put_csv(Fachats_ventes,[[0,int(time.time()),Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
-                                    f_put_tlg(bot,[[0,int(time.time()),Market,Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
+                                    f_put_tlg(bot,chat_id,[[0,int(time.time()),Market,Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
 
                             print("[+] Banque : "+ str(Banque) + " - Qte : "+ str(Qte))
                     dernier[1] = result[len(result)-1][1]
