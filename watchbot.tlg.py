@@ -40,7 +40,7 @@ Fname  = 'Sortie.csv'
 Fachats_ventes = 'Achats-Ventes.csv'
 Entetes_csv = [ 'TimeStamp','Price','Volume']
 Entetes_Trades = [ 'TimeStamp','Pair','Transaction','Qte','Price','Bank']
-Tlgkey='571262761:AAG7AzfOalBLXCKmChYLsYwWsF9e8lUfVDk'
+Tlgkey='tokenbot'
 
 bot = telegram.Bot(token=Tlgkey)
 
@@ -92,8 +92,8 @@ def f_put_tlg(data=[], entetes=[]):
         for row in data:
                 msg = msg + str(row[1:len(row)])
 
-        bot.send_message(chat_id='495305734', text=msg, parse_mode=telegram.ParseMode.HTML)
-        bot.send_message(chat_id='590683948', text=msg, parse_mode=telegram.ParseMode.HTML)
+        bot.send_message(chat_id='chat_id', text=msg, parse_mode=telegram.ParseMode.HTML)
+        bot.send_message(chat_id='chat_id', text=msg, parse_mode=telegram.ParseMode.HTML)
 
 
 
