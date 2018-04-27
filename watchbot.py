@@ -24,7 +24,7 @@ import sys
 # VARIABLE #
 # ##########
 __prog__    = 'watchbot'
-__version__ = '0.003 Alpha'
+__version__ = '0.002 Beta'
 __author__  = 'ELJIE'
 
 Pause = 10
