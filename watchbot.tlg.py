@@ -87,7 +87,7 @@ def f_put_csv(name='out.csv', data=[], entetes=[]):
             writer.writerow( (row[1:len(row)]) )
     file.close()
 
-def f_put_tlg(data=[], entetes=[]):
+def f_put_tlg(bot, data=[], entetes=[]):
     msg =''
     for row in entetes:
             msg = msg + '<b>' + row + '</b>' + ','
@@ -163,7 +163,7 @@ def main():
                                             # Entetes_Trades = [ 'TimeStamp','Pair','Transaction','Qte','Price',Bank']
                                             #print(Fachats_ventes, [0,int(time.time()), 'Achat', Qte,New_Price,Banque],Entetes_Trades)
                                             f_put_csv(Fachats_ventes,[[0,int(time.time()),Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
-                                            f_put_tlg([[0,int(time.time()),Market,Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
+                                            f_put_tlg(bot,[[0,int(time.time()),Market,Pair,'Vente', Qte,New_Price,Banque]],Entetes_Trades)
 
                             else:
                                     SellPrice = New_Price + 0
@@ -173,7 +173,7 @@ def main():
                                     print("[ ]")
                                     print("[+] Augmentation de " + str(Delta_Price)+"% => Achat de " + str(Qte) + " a "+ str(SellPrice))
                                     f_put_csv(Fachats_ventes,[[0,int(time.time()),Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
-                                    f_put_tlg([[0,int(time.time()),Market,Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
+                                    f_put_tlg(bot,[[0,int(time.time()),Market,Pair,'Achat', Qte,SellPrice,Banque]],Entetes_Trades)
 
                             print("[+] Banque : "+ str(Banque) + " - Qte : "+ str(Qte))
                     dernier[1] = result[len(result)-1][1]
