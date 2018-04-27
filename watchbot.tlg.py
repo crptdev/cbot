@@ -7,7 +7,7 @@
 #
 # Nico  : 0.002 Alpha : correctif delta, Args et Usage
 # ELJIE : 0.002 Beta  : correctif delta, dernier, f_put_csv, variabilisation de Market et Pair Version Python >= 3.4
-#
+# Nico : Ajout telegramme
 
 
 # Pour Python 3.0 et +
