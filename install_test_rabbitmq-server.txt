@@ -22,11 +22,11 @@ Lancer : rabbitmq-server start puis contr+C pour sortir du shell
 Stopper : rabbitmqctl stop
 Statut : rabbitmqctl status
 
-Pour se connecter avec guest en remote et avoir l'interface graphique en remote :
-Dans /etc/rabbitmq/rabbitmq.config insérer la ligne :
+Pour se connecter avec guest en remote et avoir l'interface graphique en remote, par défaut c'est limité en local :
+Créer /etc/rabbitmq/rabbitmq.config insérer la ligne :
 [{rabbit, [{loopback_users, []}]}].
 
-Ensuite : http://seabunny:15672
+Ensuite : http://hostname:15672
 
 user par défaut: guest/guest
 
