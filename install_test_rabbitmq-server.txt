@@ -1,0 +1,76 @@
+Sur une debian sketch :
+
+apt-get update
+apt-get upgrade
+apt-get install apt-transport-https
+
+echo "Package: erlang*
+Pin: version 1:20.1-1
+Pin-Priority: 1000
+
+Package: esl-erlang
+Pin: version 1:20.1.7
+Pin-Priority: 1000" > /etc/apt/preferences.d/erlang
+
+echo "deb https://dl.bintray.com/rabbitmq/debian stretch main" | tee /etc/apt/sources.list.d/bintray.rabbitmq.list
+wget --no-check-certificate -O- https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc | apt-key add -
+apt-get update
+apt-get upgrade
+apt-get install rabbitmq-server
+
+Lancer : rabbitmq-server start puis contr+C pour sortir du shell
+Stopper : rabbitmqctl stop
+Statut : rabbitmqctl status
+
+Pour se connecter avec guest en remote et avoir l'interface graphique en remote :
+Dans /etc/rabbitmq/rabbitmq.config insérer la ligne :
+[{rabbit, [{loopback_users, []}]}].
+
+Ensuite : http://seabunny:15672
+
+user par défaut: guest/guest
+
+Sur le client :
+
+pip3 install pika
+
+Lancer d'abord le send.py :
+
+#!/usr/bin/env python
+import pika
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='seabunny.atlantis.io'))
+channel = connection.channel()
+
+
+channel.queue_declare(queue='hello')
+
+channel.basic_publish(exchange='',
+                      routing_key='hello',
+                      body='Hello World!')
+print(" [x] Sent 'Hello World!'")
+connection.close()
+
+
+Reception du message avec receive.py :
+
+#!/usr/bin/env python
+import pika
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='seabunny.atlantis.io'))
+channel = connection.channel()
+
+
+channel.queue_declare(queue='hello')
+
+def callback(ch, method, properties, body):
+    print(" [x] Received %r" % body)
+
+channel.basic_consume(callback,
+                      queue='hello',
+                      no_ack=True)
+
+print(' [*] Waiting for messages. To exit press CTRL+C')
+channel.start_consuming()
+
+Et voilà!
