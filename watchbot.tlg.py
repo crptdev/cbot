@@ -1,6 +1,17 @@
 # -*- coding:utf-8 -*-
 
 # ####################
+# TODO               #
+# ####################
+# - renseigner les places/paires dans le .ini : [['bitfinex','btcusd'],['bitfinex','ethusd']]
+# - gérer l'exception : raise HTTPError(req.full_url, code, msg, hdrs, fp) urllib.error.HTTPError: HTTP Error 504: Gateway Time-out
+# - faire du code objet pour faciliter les échanges et un fichier par classe pour faciliter le code multi-developer
+# - mettre une option pour avoir directement les paires dispo par place ou les places dispo par paire etc...
+# - introduire des indices supplémentaires (RSI, volumes etc) qui pourront donner lieu à des courbes sur l'interface graphique et être des déclencheurs aussi
+#
+# - faire une interface graphique permettant de lancer des pumps et de controler leur activité (OK je vais loin...lol)
+
+# ####################
 # Usage              #
 # ####################
 # Cryptowatch-api.py pourcentage secondes
