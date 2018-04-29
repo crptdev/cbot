@@ -51,7 +51,7 @@ def main():
   channel.queue_declare(queue='mgo')
   
   def callback(ch, method, properties, body):
-    print("Message Telegram" % body)
+    print("Message RabbitMQ" % body)
     data = json.loads(body.decode("utf-8"))
     base.trades.insert_many(data)
 
