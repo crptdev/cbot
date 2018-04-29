@@ -8,27 +8,17 @@ import time
 import json
 import csv
 import telegram
+import pandas as pd
 
-# fichier ini pour se connecter à la base Mongo du type :
-#[mgo]
+RMQServer='seabunny.atlantis.io'
+
+# fichier ini pour se connecter a la base Mongo du type :
+# [mgo]
 # Server=mango-36.atlantis.io:27017
 # Base=clcw
 # Coll=tradescol
 
 #
-def f_put_mgo(ot, chat_id, msg):
-    msg =''
-    for row in entetes:
-            msg = msg + '<b>' + row + '</b>' + ','
-    for row in data:
-            msg = msg + str(row[1:len(row)])
-
-
-    bot.send_message(chat_id=chat_id, text=msg, parse_mode=telegram.ParseMode.HTML)
-
-def f_init_tlg(Tlgkey):
-    bot = telegram.Bot(token=Tlgkey)
-    return bot
 
 def f_Load_Conf(Fic):
 	conf =configparser.ConfigParser ()
@@ -44,27 +34,26 @@ def f_Load_Conf(Fic):
 		Coll = ''
 	return Server,Base,Coll
 
-def get_base(Server,Coll):
+def get_base(Server,Base):
     from pymongo import MongoClient
     client = MongoClient(Server)
-    db = client[Coll]
+    db=client.clcw
     return db
 
 def main():
   
   Server, Base, Coll = f_Load_Conf(sys.argv[0][:-3]  + '.ini')
   print(Server + ' ' + Base + ' ' + Coll)
-  db = get_base(Server,Coll)
+  base = get_base(Server,Base)
    
   connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQServer))
   channel = connection.channel()
   channel.queue_declare(queue='mgo')
   
   def callback(ch, method, properties, body):
-    # bot.send_message(chat_id=chat_id, text=str(body), parse_mode=telegram.ParseMode.HTML)
     print("Message Telegram" % body)
-    print(body)
-    
+    data = json.loads(body.decode("utf-8"))
+    base.trades.insert_many(data)
 
   channel.basic_consume(callback, queue='mgo', no_ack=True)
 
