@@ -45,13 +45,15 @@ def f_get_exchange_trades():
     return trades
  
 trades = f_get_exchange_trades()
+"""
 print(trades)
 print("=================================")
 print(trades[0])
+"""
 templates = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-print(templates)
-#app = Flask(__name__, template_folder=templates)
-app = Flask(__name__)
+print("repertoire Html",templates)
+app = Flask(__name__, template_folder=templates)
+#app = Flask(__name__)
 
 @app.route("/")
 def index():
