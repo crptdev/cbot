@@ -1,72 +1,43 @@
 #-*- coding:utf-8 -*-
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, flash, redirect, render_template, session, abort
+from flask import request # permet de recuperer la requette HTTP Cliente
+from flask import make_response # permet de modofier le mimetype lors d'une réponse
+from flask import jsonify # permet de JSONifier une reponse HTML
 import json
 import urllib
 from urllib.request import urlopen
 import os
 import copy
+from api import Api
 
 # ########### #
-#  VARIABLES  #
+#  VARIABLE   #
 # ########### #
-Market = 'bitfinex'
-Pair = 'btcusd'
-Url = 'https://api.cryptowat.ch/markets/'+ Market + '/'+ Pair +'/trades'
-copie_result = []
-# ##########
-# FONCTION #
-# ##########
-def f_get_trades(url):
-    tab = []
-    result = []
-    page = urlopen(url)
-    tab.append(  json.loads(page.read().decode("utf-8"))['result'] )
-    for i in tab[0]:
-            result.append(i)
-    return result #tab
+__prog__    = 'webserver'
+__version__ = '0.001 Alpha'
+__author__  = 'ELJIE'
 
-def f_diff_tab(data,result):
-  tab = []
-  for a in result:
-    if not(a in data):
-      tab.append(a)
-  if len(tab) == 0:
-    tab.append(result[len(result)-1])
-  return tab
+Debug = True
 
-def f_get_exchange_trades():
-    trades = []
-    trades = f_get_trades(Url)
-    """
-    print(Url)
-    print(trades)
-    """
-    
-    return trades
- 
-trades = f_get_exchange_trades()
-"""
-print(trades)
-print("=================================")
-print(trades[0])
-"""
-templates = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-print("repertoire Html",templates)
-app = Flask(__name__, template_folder=templates)
-#app = Flask(__name__)
 
-@app.route("/")
-def index():
-    global copie_result
-    result = f_get_exchange_trades()
-    copie_result = copy.deepcopy(result) 
-    data = copy.deepcopy(copie_result) 
-    result = f_diff_tab(data,result)
-    return render_template('api.html',**locals())    
- 
+
+app = Flask(__name__)
+app.debug = Debug
+app.secret_key = '2d9-E2.)f&é,A$p@fpa+zSU03êû9_'
+
 @app.route("/")
 def hello():
-    return "Hello World!"
+	affichage = "Hello World! <BR>"
+	return affichage
+
+
+@app.route('/api/v1/')
+@app.route('/api/v1/<string:action>', methods=['GET'])
+@app.route('/api/v1/<string:action>/<market>/<pair>', methods=['GET'])
+def api_v1(**kwargs):
+	ret = api_V1.get_api(**kwargs)
+	return jsonify(ret)
 
 if __name__ == "__main__":
+    api_V1 = Api(1)    
     app.run()
