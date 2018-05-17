@@ -41,7 +41,7 @@ def db_user_add(DB_PATH,username,password):
 			#log("[-] : ERROR: Algo de Hash'%s' non trouvé" % HASH_ALGORITHM)
 			return False
 		password = hash_func(password.encode("UTF-8")).hexdigest()	
-		db = db_connect(DB_PATH):
+		db = db_connect(DB_PATH)
 		cursor = db.cursor()
 		try:
 			cursor.execute("INSERT INTO users VALUES (?, ?);", (username, password))
@@ -59,7 +59,7 @@ def db_user_del(DB_PATH,username):
 	return True
 
 def db_user_list(DB_PATH):
-	db = db_connect(DB_PATH):
+	db = db_connect(DB_PATH)
 	cursor = db.cursor()
 	cursor.execute("SELECT username FROM users;")
 	users = cursor.fetchall()
