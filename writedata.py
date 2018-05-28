@@ -130,5 +130,4 @@ if __name__ == '__main__':
   print(data)
   entetes =  [ 'Colonne 1','Colonne 2','Colonne 3']
   wd.put_data(base='kraken',collection='btcusd',pair='btcusd',data=data,entetes=entetes)
-  exit(1)
   wd.test(media='toto', element=1)
